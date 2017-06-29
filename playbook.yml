@@ -1,0 +1,22 @@
+---
+- hosts: all
+
+  handlers:
+    - name: restart tomcat
+      service: name=tomcat state=restarted
+      
+  tasks:
+    - name: "Install Tomcat Packages."
+      package: name={{ item }} state=present
+      with_items:
+        - tomcat
+        - tomcat-webapps
+        - tomcat-admin-webapps
+        - tomcat-docs-webapp
+        - tomcat-javadoc
+        - net-tools
+      notify: restart tomcat
+
+    - name: "Enable Tomcat Service"
+      service: "name=tomcat state=started enabled=yes"
+
